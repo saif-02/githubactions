@@ -1,9 +1,5 @@
 FROM php:7.3-fpm
 
-COPY composer.lock composer.json /var/www/
-
-COPY database /var/www/database
-
 WORKDIR /var/www
 
 RUN apt-get update && apt-get -y install git && apt-get -y install zip && apt-get install -y libpng-dev
