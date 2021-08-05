@@ -15,7 +15,6 @@ RUN apt-get install -y composer
 RUN curl -s "https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh" | /bin/bash
 RUN apt-get install -y software-properties-common
 COPY . /var/www/html
-
 CMD ["apachectl","-D","FOREGROUND"]
 RUN a2enmod rewrite
 EXPOSE 80
