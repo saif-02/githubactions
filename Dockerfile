@@ -1,31 +1,22 @@
-FROM php:7.3-fpm
+FROM ubuntu:latest
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN apt-get install -y apache2 
+RUN apt-get install -y php 
+RUN apt-get install -y php-dev 
+RUN apt-get install -y php-mysql 
+RUN apt-get install -y libapache2-mod-php 
+RUN apt-get install -y php-curl 
+RUN apt-get install -y php-json 
+RUN apt-get install -y php-common 
+RUN apt-get install -y php-mbstring 
+RUN apt-get install -y composer
+RUN curl -s "https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh" | /bin/bash
+RUN apt-get install -y software-properties-common
+COPY . /var/www/html
 
-WORKDIR /var/www
-
-RUN apt-get update && apt-get -y install git && apt-get -y install zip && apt-get install -y libpng-dev
-
-
-
-
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && php composer.phar install --no-dev --no-scripts \
-    && rm composer.phar
-
-COPY . /var/www
-
-RUN chown -R www-data:www-data /var/www 
-        
-RUN chmod -R 775 /var/www 
-        
-RUN  apt-get install -y libmcrypt-dev \
-        libmagickwand-dev --no-install-recommends \
-        && pecl install mcrypt-1.0.2 \
-        && docker-php-ext-install pdo_mysql \
-        && docker-php-ext-enable mcrypt
-
-
-RUN php artisan cache:clear \
-    && php artisan config:clear \
-    && php artisan key:generate
+CMD ["apachectl","-D","FOREGROUND"]
+RUN a2enmod rewrite
+EXPOSE 80
+EXPOSE 443
